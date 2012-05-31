@@ -10,19 +10,22 @@
 %%
 %% Exported Functions
 %%
--export([ad/1]).
+-export([ad/1, ecpm/1]).
 
 %%
 %% API Functions
 %%
+ecpm(_) -> 10.
+
 ad(State = {}) ->
   receive
-    {bid, Publisher} -> 
-      Publisher ! {push_ad, self()},
-      ad(State)
-  end.
+    
+  {bid, Publisher} -> 
+    Publisher ! {push_ad, self(), State}
+  
+  end,
+  ad(State).
 
 %%
 %% Local Functions
 %%
-ecpm(Cpm) -> Cpm.

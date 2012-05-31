@@ -7,7 +7,7 @@
 %% Include files
 %%
 -import(campaign).
--import(publisher).
+-import(bidder).
 -import(ad).
 
 %%
@@ -52,11 +52,12 @@ start() ->
           new(ad, {}),
           new(ad, {})
        ]})],
-	APublisher = new(publisher,{
-                 ['food', 'science'], 
-                 'clarin.com'
-               }),
-	APublisher ! { bid_all, Campaigns }. 
+	Bidder = new(bidder,{
+               ['food', 'science'], 
+               'clarin.com'
+             }),
+	Bidder ! { bid_all, Campaigns },
+  Bidder.
 
 %%
 %% Local Functions

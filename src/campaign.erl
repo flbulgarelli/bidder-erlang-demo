@@ -18,12 +18,14 @@
 %%
 campaign(S = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads}) ->
   receive
-    {bid, Publisher, Keywords, Url} ->
-      lists:member(Url, EnabledUrls) andalso   
-      intersects(Keywords, PositiveKeywords) andalso
-      not intersects(Keywords, NegativeKeywords) andalso
-      Publisher ! {push_campaign, self()},
-      [Ad ! {bid, Publisher} || Ad <- Ads ]
+  
+  {bid, Publisher, Keywords, Url} ->
+    lists:member(Url, EnabledUrls) andalso   
+    intersects(Keywords, PositiveKeywords) andalso
+    not intersects(Keywords, NegativeKeywords) andalso
+    Publisher ! {push_campaign, self()},
+    [Ad ! {bid, Publisher} || Ad <- Ads ]
+
   end,
   campaign(S).
 
