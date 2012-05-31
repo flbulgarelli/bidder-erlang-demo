@@ -11,20 +11,21 @@
 %%
 %% Exported Functions
 %%
--export([campaign/3]).
+-export([campaign/1]).
 
 %%
 %% API Functions
 %%
-campaign(PositiveKeywords, NegativeKeywords, EnabledUrls) ->
+campaign(S = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads}) ->
   receive
     {bid, Publisher, Keywords, Url} ->
       lists:member(Url, EnabledUrls) andalso   
       intersects(Keywords, PositiveKeywords) andalso
       not intersects(Keywords, NegativeKeywords) andalso
-      Publisher ! {push_campaign, self()}
+      Publisher ! {push_campaign, self()},
+      [Ad ! {bid, Publisher} || Ad <- Ads ]
   end,
-  campaign(PositiveKeywords, NegativeKeywords, EnabledUrls).
+  campaign(S).
 
 %%
 %% Local Functions
