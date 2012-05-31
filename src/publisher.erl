@@ -10,19 +10,19 @@
 %%
 %% Exported Functions
 %%
--export([publisher/1]).
+-export([publisher/2]).
 
 %%
 %% API Functions
 %%
-publisher(Keywords) ->
+publisher(Keywords, Url) ->
   receive
     {bid_all, Campaigns} ->
-      [ It ! { bid, self(), Keywords } || It <- Campaigns],
-      publisher(Keywords);
+      [ It ! { bid, self(), Keywords, Url } || It <- Campaigns],
+      publisher(Keywords, Url);
     {push_campaign, Campaign } -> 
 		  io:format('campaing found ~w~n', [Campaign]), 
-		  publisher(Keywords);
+		  publisher(Keywords, Url);
     {push_ad, Ad } -> 
 		  io:format('ad found ~w ~n', [Ad])
 	end.

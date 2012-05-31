@@ -19,11 +19,11 @@
 %%
 start() -> 
 	Campaigns = [
-     new(campaign, [['food'],        ['poison']]),
-     new(campaign, [['food'],        ['poison']]),
-     new(campaign, [['cha cha cha'], []]),
-     new(campaign, [['food'],        ['science']])] , 
-	APublisher = new(publisher, [['food', 'science']]),
+     new(campaign, [['food'],        ['poison'],   ['clarin.com',    'lanacion.com']]),
+     new(campaign, [['food'],        ['poison'],   ['clarin.com',    'pagina12.com']]),
+     new(campaign, [['cha cha cha'], [],           ['lanacion.com']]),
+     new(campaign, [['food'],        ['science'],  ['infobae.com' ]])] , 
+	APublisher = new(publisher, [['food', 'science'], 'clarin.com']),
 	APublisher ! { bid_all, Campaigns }. 
 
 %%
