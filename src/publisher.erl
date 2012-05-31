@@ -17,11 +17,9 @@
 %%
 publisher(Keywords) ->
   receive
-    {bid, Campaign} -> 
-      Campaign ! { bid, self(), Keywords },
-      publisher(Keywords);
     {bid_all, Campaigns} ->
-			[self() ! {bid, It} || It <- Campaigns ];
+      [ It ! { bid, self(), Keywords } || It <- Campaigns],
+      publisher(Keywords);
     {push_campaign, Campaign } -> 
 		  io:format('campaing found ~w~n', [Campaign]), 
 		  publisher(Keywords);
@@ -32,5 +30,3 @@ publisher(Keywords) ->
 %%
 %% Local Functions
 %%
-
-	

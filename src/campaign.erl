@@ -20,6 +20,7 @@ campaign(PositiveKeywords, NegativeKeywords) ->
   receive
     {bid, Publisher, Keywords} ->
       intersects(Keywords, PositiveKeywords) andalso
+      not intersects(Keywords, NegativeKeywords) andalso  
       Publisher ! {push_campaign, self()}
   end,
   campaign(PositiveKeywords, NegativeKeywords).

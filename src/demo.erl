@@ -31,4 +31,3 @@ start() ->
 %%  
 new(Mod, Args) ->
   spawn(Mod, Mod, Args).
-
