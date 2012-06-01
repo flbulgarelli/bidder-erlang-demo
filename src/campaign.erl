@@ -16,18 +16,16 @@
 %%
 %% API Functions
 %%
-campaign(S = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads}) ->
+campaign(St = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Cpm}) ->
   receive
-  
-  {bid, Publisher, Keywords, Url} ->
+  {bid, Bidder, Keywords, Url} ->
     lists:member(Url, EnabledUrls) andalso   
     intersects(Keywords, PositiveKeywords) andalso
     not intersects(Keywords, NegativeKeywords) andalso
-    Publisher ! {push_campaign, self()},
-    [Ad ! {bid, Publisher} || Ad <- Ads ]
-
+    Bidder ! {push_campaign, self()},
+    [Ad ! {bid, Bidder, Cpm} || Ad <- Ads]
   end,
-  campaign(S).
+  campaign(St).
 
 %%
 %% Local Functions

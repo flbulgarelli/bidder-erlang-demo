@@ -18,42 +18,42 @@
 %%
 bidder({Keywords, Url}) ->
   bidder({Keywords, Url, []});
-bidder(State = {Keywords, Url, BestAdState}) ->
+bidder(St = {Keywords, Url, BestAdSt}) ->
   receive
+    
   {bid_all, Campaigns} ->
     [Campaign ! { bid, self(), Keywords, Url} || Campaign <- Campaigns],
-    bidder(State);
+    bidder(St);
   
   {push_campaign, Campaign } -> 
 	  io:format('campaing found ~w~n', [Campaign]),
-    bidder(State);
-  
-  {push_ad, Ad, AdState} -> 
-	  do_push_ad(Ad, AdState, State)
+    bidder(St);
     
+  {push_ad, AdUrl, Ecpm} ->
+    io:format('ad found ~w ~n', [AdUrl]),
+	  do_push_ad(St, {AdUrl, Ecpm})
+  
   after 2000 ->
-    best_ad(BestAdState)
+    best_ad(BestAdSt)
   
   end.
 
 %%
 %% Local Functions
 %%
-do_push_ad(Ad, AdState, BidderState) ->
-  io:format('ad found ~w ~n', [Ad]),
-  do_push_ad_state(AdState, BidderState).
 
+do_push_ad({Keywords,Url,[]}, AdSt) ->
+  bidder({Keywords, Url, [AdSt]});
 
-do_push_ad_state(AdState, {Keywords,Url,[]}) ->
-  bidder({Keywords, Url, [AdState]});
-
-do_push_ad_state(AdState, State = {Keywords,Url,BestAdState}) ->
-  case  ad:ecpm(AdState) > ad:ecpm(BestAdState) of 
-    true  -> bidder({Keywords, Url, [AdState]});
-    _     -> bidder(State)
+do_push_ad(St = {Keywords, Url, [BestAdSt]}, AdSt) ->
+  case  ecpm(AdSt) > ecpm(BestAdSt) of 
+    true  -> bidder({Keywords, Url, [AdSt]});
+    _     -> bidder(St)
   end.
+
+ecpm({_, Ecpm}) -> Ecpm.
 
 best_ad([]) -> 
  io:format('no matching ad found yet~n');
-best_ad([BestAdState]) ->
- io:format('best ad is ~w~n', [BestAdState]).
+best_ad([BestAdSt]) ->
+ io:format('best ad is ~w~n', [BestAdSt]).

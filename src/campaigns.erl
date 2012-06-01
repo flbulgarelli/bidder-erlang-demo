@@ -15,12 +15,12 @@
 %%
 %% API Functions
 %%
-campaigns({Campaigns}) -> 
+campaigns(Campaigns) -> 
   receive
     
   {bid, Bidder} ->
     Bidder ! { bid_all, Campaigns },
-    campaigns({Campaigns})
+    campaigns(Campaigns)
     
   end.
 
