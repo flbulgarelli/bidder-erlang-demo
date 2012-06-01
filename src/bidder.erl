@@ -29,11 +29,11 @@ bidder(State = {Keywords, Url, BestAdState}) ->
     bidder(State);
   
   {push_ad, Ad, AdState} -> 
-	  do_push_ad(Ad, AdState, State);
+	  do_push_ad(Ad, AdState, State)
     
-  {best_ad} ->
-    best_ad(BestAdState),
-    bidder(State)
+  after 2000 ->
+    best_ad(BestAdState)
+  
   end.
 
 %%
