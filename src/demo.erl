@@ -9,6 +9,7 @@
 -import(campaign).
 -import(bidder).
 -import(ad).
+-import(x).
 
 %%
 %% Exported Functions
@@ -18,41 +19,42 @@
 %% 
 %% API Functions
 %% 
+
 start() -> 
 	Campaigns = [
-     new(campaign,{
+     x:new(campaign,{
         ['food'],
         ['poison'],
         ['clarin.com', 'lanacion.com'],
-        [new(ad, {}),
-         new(ad, {}),
-         new(ad, {})] 
+        [x:new(ad, {}),
+         x:new(ad, {}),
+         x:new(ad, {})] 
      }),
-     new(campaign,{
+     x:new(campaign,{
          ['food'],
          ['poison'],
          ['clarin.com', 'pagina12.com'],
-         [new(ad, {}),
-          new(ad, {}),
-          new(ad, {})]
+         [x:new(ad, {}),
+          x:new(ad, {}),
+          x:new(ad, {})]
     }),
-     new(campaign,{
+     x:new(campaign,{
          ['cha cha cha'],
          [],
          ['lanacion.com'],
-         [new(ad, {}),
-          new(ad, {}),
-          new(ad, {})]
+         [x:new(ad, {}),
+          x:new(ad, {}),
+          x:new(ad, {})]
      }),
-     new(campaign,{
+     x:new(campaign,{
          ['food'],
          ['science'], 
          ['infobae.com' ],
-         [new(ad, {}),
-          new(ad, {}),
-          new(ad, {})
+         [x:new(ad, {}),
+          x:new(ad, {}),
+          x:new(ad, {})
        ]})],
-	Bidder = new(bidder,{
+	Bidder = x:new(bidder,{
                ['food', 'science'], 
                'clarin.com'
              }),
@@ -62,5 +64,4 @@ start() ->
 %%
 %% Local Functions
 %%  
-new(Mod, State) ->
-  spawn(Mod, Mod, [State]).
+
