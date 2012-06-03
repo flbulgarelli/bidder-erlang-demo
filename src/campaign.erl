@@ -18,7 +18,14 @@ campaign(St = {PositiveKeywords,
     member(Url, EnabledUrls) andalso   
     intersects(Keywords, PositiveKeywords) andalso
     not intersects(Keywords, NegativeKeywords) andalso
-    [Ad ! {bid, Bidder, Cpm, self()} || Ad <- Ads]
+    [Ad ! {bid, Bidder, Cpm, self()} || Ad <- Ads];
+  
+  {clicked, Ad} ->
+    Ad ! clicked;
+
+  {printed, Ad} ->
+    Ad ! printed
+  
   end,
   campaign(St).
 
