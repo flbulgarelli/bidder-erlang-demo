@@ -4,7 +4,7 @@
 -module(campaign).
 
 -import(lists, [member/2, any/2]).
--import(common, [clicked/1, printed/1]).
+-import(common, [clicked/1, printed/1, complete/2]).
 -import(erlang, [append_element/2]).
 -include("base.hrl").
 -export([campaign/1]).
@@ -22,6 +22,7 @@ campaign_(St = {PositiveKeywords,
   [Ad ! {init, Package} || Ad <- Ads],
   
   receive
+    
   {bid, Bidder, Keywords, Url} ->
     member(Url, EnabledUrls) andalso   
     intersects(Keywords, PositiveKeywords) andalso
@@ -31,18 +32,23 @@ campaign_(St = {PositiveKeywords,
   
   {clicked, Ad} ->
     Ad ! clicked,
-    campaign_(counter(St, clicked(Counter)));
+    do_counter_updated(St, Package, clicked(Counter));
 
   {printed, Ad} ->
     Ad ! printed,
-    campaign_(counter(St, printed(Counter)))
+    do_counter_updated(St, Package, printed(Counter))
   
   end.
-
-
+%TODO end ads when campaign ends
 %% Private Functions
-counter({PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Package, _}, Counter) ->
-  {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Package, Counter}.
+do_counter_updated(St, Package, UpdatedCounter) ->
+  case complete(UpdatedCounter, Package) of
+    true -> io:format("campaign finished ~n"), ok;
+    _    -> campaign_(counter(St, UpdatedCounter))  
+  end.
+
+counter(St, Counter) ->
+  setelement(6, St, Counter).
 
 intersects(L1, L2) ->
   any(fun(It) -> 

@@ -27,16 +27,17 @@ ad_(St = {Url, Counter, Package}) ->
     ad_(St);
   
   clicked ->
-    ad_({Url, clicked(Counter)});
+    ad_({Url, clicked(Counter), Package});
     
   printed ->
-    ad_({Url, printed(Counter)})
+    ad_({Url, printed(Counter), Package})
   
   end.
 
-%% TODO usar cpm, incrementar el cpm, estrategias de escape
+%% TODO estrategias de escape
 %% TODO unit testing
 %% TODO mnesia
 %% TODO code conventions
+%% TODO usar records para el estado interno
 
 
