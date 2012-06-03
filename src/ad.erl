@@ -17,8 +17,9 @@ cpc_ad({Url}) ->
 ad(St = {Url, Counter}) ->
   io:format('Ad ~w with counter ~w~n', [Url, Counter]),
   receive
-  {bid, Bidder, Cpm} -> 
-    Bidder ! {push_bid, self(), Url, ecpm(Counter, Cpm)},
+    %TODO reorder parameters
+  {bid, Bidder, Cpm, Campaign} -> 
+    Bidder ! {push_bid, self(), Url, ecpm(Counter, Cpm), Campaign},
     ad(St);
   
   clicked ->

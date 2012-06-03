@@ -3,10 +3,8 @@
 %% Description: TODO: Add description to page
 -module(bidder).
 
--import(ad).
-
 -export([bidder/1]).
--record(bid, {url, ecpm, ad}).
+-record(bid, {url, ecpm, ad, campaign}).
 
 %% Variables: El sufijo St indica que es un record o tupla asociado a un actor. vale lo mismo para los campos de un struct 
 
@@ -19,9 +17,9 @@ bidder(St = {Keywords, Url, Bid}) ->
     [Campaign ! { bid, self(), Keywords, Url} || Campaign <- Campaigns],
     bidder(St);
     
-  {push_bid, Ad, AdUrl, Ecpm} ->
+  {push_bid, Ad, AdUrl, Ecpm, Campaign} ->
     io:format('ad found ~w ~n', [AdUrl]),
-	  do_push_bid(St, #bid{url=AdUrl, ecpm=Ecpm, ad=Ad})
+	  do_push_bid(St, #bid{url=AdUrl, ecpm=Ecpm, ad=Ad, campaign=Campaign})
   
   after 2000 ->
     best_bid(Bid)
