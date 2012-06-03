@@ -3,28 +3,21 @@
 %% Description: TODO: Add description to ad
 -module(ad).
 
-%%
-%% Include files
-%%
-
-%%
-%% Exported Functions
-%%
 -export([cpc_ad/1, cpm_ad/1]).
+-record(cpm, {prints=0}).
+-record(cpc, {prints=0, clicks=0}).
 
-%%
-%% API Functions
-%%
+%% Actors
 cpm_ad({Url}) ->
-  ad({Url, {0}}).
+  ad({Url, #cpm{}}).
 
 cpc_ad({Url}) ->
-  ad({Url, {0, 0}}).
+  ad({Url, #cpc{}}).
 
 ad(St = {Url, Counter}) ->
   receive
   {bid, Bidder, Cpm} -> 
-    Bidder ! {push_ad, Url, ad_ecpm(St, Cpm)};
+    Bidder ! {push_ad, Url, ecpm(Counter, Cpm)};
   
   {clicked} ->
     ad({Url, increment_clicked(Counter)});
@@ -34,30 +27,27 @@ ad(St = {Url, Counter}) ->
   end,
   ad(St).
 
-
 %% TODO usar cpm, incrementar el cpm, estrategias de escape
-%%
-%% Local Functions
-%%
-ad_ecpm({_, Counter}, Cpm) ->
-  ecpm(Counter, Cpm).
+%% TODO unit testing
+%% TODO mnesia
+%% TODO code conventions
 
-increment_clicked({PrintCounter, ClickCounter}) ->
-  {PrintCounter, ClickCounter+1};
-increment_clicked(Counter) ->
+%% Private Functions
+increment_clicked(Counter = #cpc{clicks=C}) ->
+  Counter#cpc{clicks=C+1};
+increment_clicked(Counter = #cpm{}) ->
   Counter.
 
-increment_printed({PrintCounter, ClickCounter}) ->
-  {PrintCounter+1, ClickCounter};
-increment_printed({PrintCounter}) ->
-  {PrintCounter+1}.
+increment_printed(Counter = #cpc{prints=P}) ->
+  Counter#cpc{prints=P+1};
+increment_printed(Counter = #cpm{prints=P}) ->
+  Counter#cpm{prints=P+1}.
 
-%% ecpm(Counter = {_, _}, Cpm)
-%%   -> Cpm * ctr(Counter);
-ecpm(_, Cpm)
+ecpm(Counter = #cpc{}, Cpm)
+  -> Cpm * ctr(Counter);
+ecpm(#cpm{}, Cpm)
   -> Cpm.
 
-%% ctr({0, _}) -> 
-%%   1;
-%% ctr({PrintCount, ClickCount}) ->
-%%   ClickCount/ PrintCount.
+%FIXME este cofieciente fluctua mucho en los primero momentos
+ctr(#cpc{prints=P, clicks=C}) ->
+  C / P.
