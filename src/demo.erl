@@ -9,7 +9,7 @@
 -import(campaign).
 -import(bidder).
 -import(ad).
--import(x).
+-import(x, [new/2, new/3]).
 
 %%
 %% Exported Functions
@@ -21,40 +21,40 @@
 %% 
 
 start() -> 
-	Campaigns = x:new(campaigns, [
-     x:new(campaign,{
+	Campaigns = new(campaigns, [
+     new(campaign,{
         ['food'],
         ['poison'],
         ['clarin.com', 'lanacion.com'],
-        [x:new(ad, cpm_ad, {'http://localhost/ad1'}),
-         x:new(ad, cpm_ad, {'http://localhost/ad2'}),
-         x:new(ad, cpm_ad, {'http://localhost/ad3'})],
+        [new(ad, cpm_ad, {'http://localhost/ad1'}),
+         new(ad, cpm_ad, {'http://localhost/ad2'}),
+         new(ad, cpm_ad, {'http://localhost/ad3'})],
         1.0 
      }),
-     x:new(campaign,{
+     new(campaign,{
          ['food'],
          ['poison'],
          ['clarin.com', 'pagina12.com'],
-         [x:new(ad, cpm_ad, {'http://localhost/ad4'}),
-          x:new(ad, cpm_ad, {'http://localhost/ad5'})],
+         [new(ad, cpm_ad, {'http://localhost/ad4'}),
+          new(ad, cpm_ad, {'http://localhost/ad5'})],
          2.0
     }),
-     x:new(campaign,{
+     new(campaign,{
          ['cha cha cha'],
          [],
          ['lanacion.com'],
-         [x:new(ad, cpm_ad, {'http://localhost/ad6'})],
+         [new(ad, cpm_ad, {'http://localhost/ad6'})],
          1.4
      }),
-     x:new(campaign,{
+     new(campaign,{
          ['food'],
          ['science'], 
          ['infobae.com' ],
-         [x:new(ad, cpm_ad, {'http://localhost/ad7'}),
-          x:new(ad, cpm_ad, {'http://localhost/ad8'})],
+         [new(ad, cpm_ad, {'http://localhost/ad7'}),
+          new(ad, cpm_ad, {'http://localhost/ad8'})],
          2.1
     })]),
-	Bidder = x:new(bidder,{
+	Bidder = new(bidder,{
                ['food', 'science'], 
                'clarin.com'
              }),

@@ -6,7 +6,7 @@
 %%
 %% Include files
 %%
--import(lists).
+-import(lists, [member/2, any/2]).
 
 %%
 %% Exported Functions
@@ -19,7 +19,7 @@
 campaign(St = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Cpm}) ->
   receive
   {bid, Bidder, Keywords, Url} ->
-    lists:member(Url, EnabledUrls) andalso   
+    member(Url, EnabledUrls) andalso   
     intersects(Keywords, PositiveKeywords) andalso
     not intersects(Keywords, NegativeKeywords) andalso
     Bidder ! {push_campaign, self()},
@@ -31,5 +31,5 @@ campaign(St = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Cpm}) ->
 %% Local Functions
 %%
 intersects(L1, L2) ->
-  lists:any(fun(It) -> 
-    lists:member(It, L1) end, L2).
+  any(fun(It) -> 
+    member(It, L1) end, L2).
