@@ -3,19 +3,11 @@
 %% Description: TODO: Add description to campaign
 -module(campaign).
 
-%%
-%% Include files
-%%
 -import(lists, [member/2, any/2]).
 
-%%
-%% Exported Functions
-%%
 -export([campaign/1]).
 
-%%
-%% API Functions
-%%
+%% Actors
 campaign(St = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Cpm}) ->
   receive
   {bid, Bidder, Keywords, Url} ->
@@ -27,9 +19,7 @@ campaign(St = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Cpm}) ->
   end,
   campaign(St).
 
-%%
-%% Local Functions
-%%
+%% Private Functions
 intersects(L1, L2) ->
   any(fun(It) -> 
     member(It, L1) end, L2).

@@ -19,7 +19,6 @@
 %% 
 %% API Functions
 %% 
-
 start() -> 
 	Campaigns = new(campaigns, [
      new(campaign,{

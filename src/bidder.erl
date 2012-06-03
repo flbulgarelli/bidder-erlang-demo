@@ -3,19 +3,11 @@
 %% Description: TODO: Add description to page
 -module(bidder).
 
-%%
-%% Include files
-%%
 -import(ad).
 
-%%
-%% Exported Functions
-%%
 -export([bidder/1]).
 
-%%
-%% API Functions
-%%
+%% Actors
 bidder({Keywords, Url}) ->
   bidder({Keywords, Url, []});
 bidder(St = {Keywords, Url, BestAdSt}) ->
@@ -38,10 +30,7 @@ bidder(St = {Keywords, Url, BestAdSt}) ->
   
   end.
 
-%%
-%% Local Functions
-%%
-
+%% Private Functions
 do_push_ad({Keywords,Url,[]}, AdSt) ->
   bidder({Keywords, Url, [AdSt]});
 

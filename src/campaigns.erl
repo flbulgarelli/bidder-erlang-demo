@@ -3,18 +3,9 @@
 %% Description: TODO: Add description to campaigns
 -module(campaigns).
 
-%%
-%% Include files
-%%
-
-%%
-%% Exported Functions
-%%
 -export([campaigns/1]).
 
-%%
-%% API Functions
-%%
+%% Actors
 campaigns(Campaigns) -> 
   receive
     
@@ -23,8 +14,3 @@ campaigns(Campaigns) ->
     campaigns(Campaigns)
     
   end.
-
-%%
-%% Local Functions
-%%
-
