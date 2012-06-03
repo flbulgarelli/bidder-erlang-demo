@@ -8,13 +8,16 @@
 -export([campaign/1]).
 
 %% Actors
-campaign(St = {PositiveKeywords, NegativeKeywords, EnabledUrls, Ads, Cpm}) ->
+campaign(St = {PositiveKeywords, 
+               NegativeKeywords, 
+               EnabledUrls, 
+               Ads, 
+               Cpm}) ->
   receive
   {bid, Bidder, Keywords, Url} ->
     member(Url, EnabledUrls) andalso   
     intersects(Keywords, PositiveKeywords) andalso
     not intersects(Keywords, NegativeKeywords) andalso
-    Bidder ! {push_campaign, self()},
     [Ad ! {bid, Bidder, Cpm} || Ad <- Ads]
   end,
   campaign(St).

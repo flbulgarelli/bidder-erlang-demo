@@ -6,43 +6,40 @@
 -import(ad).
 
 -export([bidder/1]).
+-record(bid, {url, ecpm, ad}).
+
+%% Variables: El sufijo St indica que es un record o tupla asociado a un actor. vale lo mismo para los campos de un struct 
 
 %% Actors
 bidder({Keywords, Url}) ->
   bidder({Keywords, Url, []});
-bidder(St = {Keywords, Url, BestAdSt}) ->
+bidder(St = {Keywords, Url, Bid}) ->
   receive
-    
   {bid_all, Campaigns} ->
     [Campaign ! { bid, self(), Keywords, Url} || Campaign <- Campaigns],
     bidder(St);
-  
-  {push_campaign, Campaign } -> 
-	  io:format('campaing found ~w~n', [Campaign]),
-    bidder(St);
     
-  {push_ad, AdUrl, Ecpm} ->
+  {push_bid, Ad, AdUrl, Ecpm} ->
     io:format('ad found ~w ~n', [AdUrl]),
-	  do_push_ad(St, {AdUrl, Ecpm})
+	  do_push_bid(St, #bid{url=AdUrl, ecpm=Ecpm, ad=Ad})
   
   after 2000 ->
-    best_ad(BestAdSt)
-  
+    best_bid(Bid)
   end.
 
 %% Private Functions
-do_push_ad({Keywords,Url,[]}, AdSt) ->
-  bidder({Keywords, Url, [AdSt]});
+do_push_bid({Keywords,Url,[]}, NewBid) ->
+  bidder({Keywords, Url, [NewBid]});
 
-do_push_ad(St = {Keywords, Url, [BestAdSt]}, AdSt) ->
-  case  ecpm(AdSt) > ecpm(BestAdSt) of 
-    true  -> bidder({Keywords, Url, [AdSt]});
+do_push_bid(St = {Keywords, Url, [BestBid]}, NewBid) ->
+  case  NewBid#bid.ecpm > BestBid#bid.ecpm of 
+    true  -> bidder({Keywords, Url, [NewBid]});
     _     -> bidder(St)
   end.
 
-ecpm({_, Ecpm}) -> Ecpm.
 
-best_ad([]) -> 
+best_bid([]) -> 
  io:format('no matching ad found yet~n');
-best_ad([BestAdSt]) ->
- io:format('best ad is ~w~n', [BestAdSt]).
+best_bid([BestBid]) ->
+ io:format('best bid is ~w~n', [BestBid]),
+ BestBid#bid.ad ! printed.

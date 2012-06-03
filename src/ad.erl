@@ -15,15 +15,16 @@ cpc_ad({Url}) ->
   ad({Url, #cpc{}}).
 
 ad(St = {Url, Counter}) ->
+  io:format('Ad ~w with counter ~w~n', [Url, Counter]),
   receive
   {bid, Bidder, Cpm} -> 
-    Bidder ! {push_ad, Url, ecpm(Counter, Cpm)},
+    Bidder ! {push_bid, self(), Url, ecpm(Counter, Cpm)},
     ad(St);
   
-  {clicked} ->
+  clicked ->
     ad({Url, increment_clicked(Counter)});
     
-  {printed} ->
+  printed ->
     ad({Url, increment_printed(Counter)})
   end.
 
