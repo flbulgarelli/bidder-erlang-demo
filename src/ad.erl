@@ -17,15 +17,15 @@ cpc_ad({Url}) ->
 ad(St = {Url, Counter}) ->
   receive
   {bid, Bidder, Cpm} -> 
-    Bidder ! {push_ad, Url, ecpm(Counter, Cpm)};
+    Bidder ! {push_ad, Url, ecpm(Counter, Cpm)},
+    ad(St);
   
   {clicked} ->
     ad({Url, increment_clicked(Counter)});
     
   {printed} ->
     ad({Url, increment_printed(Counter)})
-  end,
-  ad(St).
+  end.
 
 %% TODO usar cpm, incrementar el cpm, estrategias de escape
 %% TODO unit testing
