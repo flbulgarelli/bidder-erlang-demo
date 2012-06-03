@@ -3,18 +3,18 @@
 %% Description: TODO: Add description to ad
 -module(ad).
 
--import(common, [printed/1, clicked/1, ecpm/2]).
--export([ad/1]).
 -include("base.hrl").
+-import(common, [printed/1, clicked/1, ecpm/2]).
+
+-export([ad/1]).
 
 %% Actors
 ad({Url}) ->
   receive
   {init, Package} ->
-    ad({Url, #counter{}, Package})
-  end;
-
-ad(St = {Url, Counter, Package}) ->
+    ad_({Url, #counter{}, Package})
+  end.
+ad_(St = {Url, Counter, Package}) ->
   io:format('Ad ~w with counter ~w~n', [Url, Counter]),
   receive
     
@@ -24,13 +24,13 @@ ad(St = {Url, Counter, Package}) ->
                    ecpm=ecpm(Counter, Package), 
                    ad=self(), 
                    campaign=Campaign } }, 
-    ad(St);
+    ad_(St);
   
   clicked ->
-    ad({Url, clicked(Counter)});
+    ad_({Url, clicked(Counter)});
     
   printed ->
-    ad({Url, printed(Counter)})
+    ad_({Url, printed(Counter)})
   
   end.
 

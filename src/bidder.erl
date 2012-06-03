@@ -10,7 +10,6 @@
 %% Variables: El sufijo St indica que es un record o tupla asociado a un actor. vale lo mismo para los campos de un struct 
 
 %% Actors
-%TODO remove superflous state
 bidder({Keywords, Url}) ->
   bidder({Keywords, Url, []});
 bidder(St = {Keywords, Url, BestBid}) ->
