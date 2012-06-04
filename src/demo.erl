@@ -10,7 +10,7 @@
 -import(bidder).
 -import(ad).
 -import(x, [new/2, new/3]).
--include("base.hrl").
+-include("common.hrl").
 
 %%
 %% Exported Functions

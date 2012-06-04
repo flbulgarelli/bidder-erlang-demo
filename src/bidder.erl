@@ -5,7 +5,7 @@
 
 -export([bidder/1]).
 
--include("base.hrl").
+-include("common.hrl").
 
 %% Variables: El sufijo St indica que es un record o tupla asociado a un actor. vale lo mismo para los campos de un struct 
 

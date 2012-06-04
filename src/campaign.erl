@@ -6,7 +6,7 @@
 -import(lists, [member/2, any/2]).
 -import(common, [clicked/1, printed/1, complete/2]).
 -import(erlang, [append_element/2]).
--include("base.hrl").
+-include("common.hrl").
 -export([campaign/1]).
 
 %% Actors

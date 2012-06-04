@@ -3,7 +3,7 @@
 %% Description: TODO: Add description to ad
 -module(ad).
 
--include("base.hrl").
+-include("common.hrl").
 -import(common, [printed/1, clicked/1, ecpm/2]).
 
 -export([ad/1]).

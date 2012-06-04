@@ -3,7 +3,7 @@
 %% Description: TODO: Add description to common
 -module(common).
 
--include("base.hrl").
+-include("common.hrl").
 -export([ecpm/2, ctr/1, clicked/1, printed/1, complete/2]).
 
 %% Private Functions
