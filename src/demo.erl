@@ -21,7 +21,7 @@
 %% API Functions
 %% 
 start() -> 
-	Campaigns = new(campaigns, [
+	Campaigns = [
      new(campaign,{
         ['food'],
         ['poison'],
@@ -53,12 +53,12 @@ start() ->
          [new(ad,{'http://localhost/ad7'}),
           new(ad,{'http://localhost/ad8'})],
          #package{mode=cpm, price=2.1, max=100}
-    })]),
+    })],
 	Bidder = new(bidder,{
                ['food', 'science'], 
                'clarin.com'
              }),
-	Campaigns ! { bid, Bidder }.
+	Bidder ! {bid_all, Campaigns}.
 
 %%
 %% Local Functions
